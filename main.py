@@ -21,7 +21,7 @@ def generate_poster(image_path):
 
     poster = overlay_image(background.copy(), cutout)
 
-    fade_gradient = create_fade_to_transparent(left_bg)
+    fade_gradient = create_fade_to_transparent(left_bg, fade_strength=0.9)
     poster = overlay_transparent(poster, fade_gradient)
 
     # 🔹 Save the final poster using `save_poster()`

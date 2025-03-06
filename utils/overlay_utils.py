@@ -23,14 +23,14 @@ def overlay_image(bg, fg):
 
     return bg
 
-def create_fade_to_transparent(color, width=1920, height=1080, fade_strength=0.7):
+def create_fade_to_transparent(color, width=1920, fade_strength=0.4, height=1080):
     """Creates a vertical gradient from a solid color at the bottom to fully transparent at the top."""
     print("🎨 Creating transparent fade overlay...")
     fade_height = int(height * fade_strength)
     gradient = np.zeros((height, width, 4), dtype=np.uint8)
 
     for y in range(height):
-        alpha = int((1 - (y / fade_height)) * 255) if y < fade_height else 0
+        alpha = int((y / fade_height) * 255) if y < fade_height else 255
         gradient[y, :, :3] = np.array(color)
         gradient[y, :, 3] = alpha
 
