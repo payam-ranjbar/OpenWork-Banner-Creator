@@ -62,3 +62,42 @@ def apply_tint_filter(image, tint_color, strength=0.5):
 
     print("✅ Tint filter applied successfully.")
     return tinted_image
+
+
+def process_background_image(image_path, opacity=0.5):
+    """
+    Loads a background image, removes white pixels (makes them transparent), and applies opacity.
+
+    Parameters:
+    - image_path (str): Path to the background image file.
+    - opacity (float): Opacity level (0 = fully transparent, 1 = fully opaque).
+
+    Returns:
+    - np.ndarray: Processed background image with transparency.
+    """
+    print(f"🖼️ Processing background image from {image_path} with opacity {opacity}...")
+
+    # Load image with alpha channel (to retain transparency)
+    image = cv2.imread(image_path, cv2.IMREAD_UNCHANGED)
+    if image is None:
+        raise ValueError(f"❌ Error: Could not load image from {image_path}")
+
+    # Convert to RGBA if it's not already
+    if image.shape[2] == 3:  # If the image has no alpha channel, add one
+        image = cv2.cvtColor(image, cv2.COLOR_BGR2BGRA)
+
+    # Define the white color range to be removed
+    lower_white = np.array([200, 200, 200, 255], dtype=np.uint8)  # Bright white
+    upper_white = np.array([255, 255, 255, 255], dtype=np.uint8)
+
+    # Create a mask for white pixels
+    white_mask = cv2.inRange(image, lower_white, upper_white)
+
+    # Set white pixels to fully transparent
+    image[white_mask == 255] = [0, 0, 0, 0]  # RGBA: (0, 0, 0, 0)
+
+    # Apply opacity by modifying the alpha channel
+    image[:, :, 3] = (image[:, :, 3] * opacity).astype(np.uint8)
+
+    print("✅ Background processing complete (White pixels removed, opacity applied).")
+    return image
