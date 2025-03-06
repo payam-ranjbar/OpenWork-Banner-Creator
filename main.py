@@ -3,6 +3,7 @@ import os
 from utils.color_utils import extract_colors, create_gradient_rectangle
 from utils.text_utils import add_text
 from utils.bg_remover import remove_background_fast
+from utils.image_filters import apply_tint_filter, decrease_contrast
 from utils.overlay_utils import overlay_image, create_fade_to_transparent, overlay_transparent
 from utils.file_utils import save_poster
 
@@ -17,9 +18,12 @@ def generate_poster(image_path):
 
     cutout = remove_background_fast(image_path)
 
+    low_contrast = decrease_contrast(cutout, 0.1)
+    tinted = apply_tint_filter(low_contrast, right_bg, strength=0.3)
+
     background = cv2.cvtColor(background, cv2.COLOR_RGB2RGBA)
 
-    poster = overlay_image(background.copy(), cutout)
+    poster = overlay_image(background.copy(), tinted)
 
     fade_gradient = create_fade_to_transparent(left_bg, fade_strength=0.9)
     poster = overlay_transparent(poster, fade_gradient)
@@ -31,5 +35,5 @@ def generate_poster(image_path):
 
 # Example Usage
 if __name__ == "__main__":
-    image_path = "sample-image/payam.png"
+    image_path = "sample-image/soroosh.png"
     generate_poster(image_path)

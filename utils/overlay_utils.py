@@ -43,3 +43,5 @@ def overlay_transparent(bg, fg):
     for c in range(3):
         bg[:, :, c] = fg[:, :, c] * alpha_fg + bg[:, :, c] * (1 - alpha_fg)
     return bg
+
+
