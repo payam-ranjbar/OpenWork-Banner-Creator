@@ -1,6 +1,6 @@
 import cv2
 import numpy as np
-
+from utils.blending_modes import blend_normal
 def overlay_image(bg, fg):
     """Overlays the cutout image onto the background while maintaining aspect ratio."""
     print("🔗 Overlaying subject on background...")
@@ -36,12 +36,17 @@ def create_fade_to_transparent(color, width=1920, fade_strength=0.4, height=1080
 
     return gradient
 
-def overlay_transparent(bg, fg):
-    """Overlays a transparent gradient on top of another image."""
-    print("🔗 Applying transparency effect...")
-    alpha_fg = fg[:, :, 3] / 255.0
-    for c in range(3):
-        bg[:, :, c] = fg[:, :, c] * alpha_fg + bg[:, :, c] * (1 - alpha_fg)
-    return bg
+def add_images(bg, fg, blend_function=None):
 
+    print(f"🔗 Applying custom blend mode...")
 
+    fg = cv2.resize(fg, (bg.shape[1], bg.shape[0]))
+
+    alpha_fg = fg[:, :, 3] / 255.0  # Alpha mask (0-1)
+
+    if blend_function is None:
+        blend_function = blend_normal
+
+    blended_image = blend_function(bg, fg, alpha_fg)
+
+    return blended_image
