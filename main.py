@@ -31,5 +31,5 @@ def generate_poster(image_path):
 
 # Example Usage
 if __name__ == "__main__":
-    image_path = "sample-image/ali.jpg"
+    image_path = "sample-image/payam.png"
     generate_poster(image_path)
