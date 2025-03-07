@@ -11,7 +11,6 @@ matplotlib.use("Agg")
 def plot_colors(image_path):
     # Load images and process colors
     base_image = load_image_rgb(image_path)
-    cutout = remove_background_fast(image_path)
 
     dom_color_og = get_dominant_color(base_image)
     complementary_color = get_complementary_color(dom_color_og)
@@ -53,5 +52,5 @@ def plot_colors(image_path):
 # Example Usage
 
 if __name__ == "__main__":
-    image_path = "sample-image/payam.png"  # Update this path
+    image_path = "sample-image/drvoid.png"  # Update this path
     plot_colors(image_path)

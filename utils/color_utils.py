@@ -22,7 +22,8 @@ def extract_colors(image_path):
 
 def create_gradient_rectangle(color1, color2, width=1920, height=1080):
     """Vectorized gradient creation for better performance."""
-
+    color2 = color2[::-1]
+    color1 = color1[::-1]
     gradient = np.zeros((height, width, 3), dtype=np.uint8)
     color1 = np.array(color1, dtype=np.float32)
     color2 = np.array(color2, dtype=np.float32)
