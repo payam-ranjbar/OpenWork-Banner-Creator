@@ -3,11 +3,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib
 matplotlib.use("Agg")
-from utils.color_utils import extract_colors, create_gradient_rectangle
+from utils.color_utils import create_gradient_rectangle
 from utils.color_wheel import get_colors, get_complementary_color, get_dominant_color
 from utils.text_utils import add_text
 from utils.bg_remover import remove_background_fast
-from utils.image_filters import apply_tint_filter, decrease_contrast, process_background_image
+from utils.image_filters import apply_tint_filter, decrease_contrast, process_background_image, apply_gaussian_blur
 from utils.overlay_utils import overlay_image, create_fade_to_transparent, add_images, generate_gradient_mask_from_image
 from utils.file_utils import save_poster, load_image_rgb, get_unique_filename
 from utils.blending_modes import blend_overlay
@@ -34,6 +34,7 @@ def generate_poster(image_path, bg_pattern_source):
     bg_pattern = process_background_image(bg_pattern_source, opacity=0.2)
 
     bg_pattern = apply_mask(bg_pattern, generate_gradient_mask_from_image(bg_pattern, interploation="linear"))
+    bg_pattern = apply_gaussian_blur(bg_pattern, 9)
     background = add_images(background, bg_pattern)
     background = add_text(background, "#Open to Work", text_color)
 
@@ -111,7 +112,7 @@ def debug_save_gradient_mask(mask, filename="debug_mask.png", show=False):
 
 # Example Usage
 if __name__ == "__main__":
-    image_path = "sample-image/payam.png"
+    image_path = "sample-image/soroosh-head.jpg"
     bg_pattern_source = "background-patterns/soroosh-pattern-bg.png"
 
     pic = cv2.imread(image_path, cv2.IMREAD_UNCHANGED)

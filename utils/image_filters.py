@@ -101,3 +101,28 @@ def process_background_image(image_path, opacity=0.5):
 
     print("✅ Background processing complete (White pixels removed, opacity applied).")
     return image
+
+import cv2
+import numpy as np
+
+def apply_gaussian_blur(image, blur_amount=5):
+    """
+    Applies a Gaussian blur to an image.
+
+    Parameters:
+    - image (np.ndarray): Input image.
+    - blur_amount (int): Blur intensity (must be an odd number, e.g., 3, 5, 7).
+
+    Returns:
+    - np.ndarray: Blurred image.
+    """
+    print(f"🌫️ Applying Gaussian Blur with intensity {blur_amount}...")
+
+    # Ensure blur_amount is an odd number (required by cv2.GaussianBlur)
+    if blur_amount % 2 == 0:
+        blur_amount += 1  # Make it the next odd number
+
+    # Apply Gaussian blur
+    blurred_image = cv2.GaussianBlur(image, (blur_amount, blur_amount), 0)
+
+    return blurred_image
