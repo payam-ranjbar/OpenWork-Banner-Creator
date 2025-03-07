@@ -11,6 +11,8 @@ def add_text(image, text, color, max_font_size=500, min_font_size=60, letter_spa
 
     text = text.upper()  # Convert text to ALL CAPS
 
+    color_rgb = (color[2], color[1], color[0])  # Convert BGR → RGB
+    color = color_rgb
     # Convert OpenCV image to PIL for better text rendering
     image_pil = Image.fromarray(image)
 
@@ -26,7 +28,7 @@ def add_text(image, text, color, max_font_size=500, min_font_size=60, letter_spa
         text_width = sum((font.getbbox(char)[2] - font.getbbox(char)[0]) + letter_spacing for char in text) - letter_spacing
         text_height = font.getbbox(text)[3] - font.getbbox(text)[1]
 
-        text_height = text_height - 70
+        text_height = text_height + 70
         if text_width < width * 0.9:  # Ensure text covers ~90% of width
             break
         font_size -= 5  # Reduce font size in small steps

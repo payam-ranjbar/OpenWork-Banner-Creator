@@ -27,3 +27,41 @@ def create_gradient_rectangle(color1, color2, width=1920, height=1080):
         alpha = x / (width - 1)
         gradient[:, x] = (1 - alpha) * np.array(color1) + alpha * np.array(color2)
     return gradient
+
+
+def get_dominant_color(image):
+    """
+    Detects the dominant color in an image.
+
+    Parameters:
+    - image (np.ndarray): Input image in BGR format.
+
+    Returns:
+    - tuple[int, int, int]: The dominant RGB color.
+"""
+    print("🎨 Detecting dominant color...")
+
+    # Convert to RGB (since OpenCV loads in BGR)
+    image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+
+    # Resize image to speed up processing
+    small_image = cv2.resize(image, (50, 50))  # Reduce size for faster processing
+
+    # Reshape the image to be a list of pixels
+    pixels = small_image.reshape(-1, 3)
+
+    # Use k-means clustering to find the dominant color
+    num_clusters = 3  # Using 3 clusters to avoid noise
+    pixels = np.float32(pixels)
+
+    criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 10, 1.0)
+    _, labels, centers = cv2.kmeans(pixels, num_clusters, None, criteria, 10, cv2.KMEANS_RANDOM_CENTERS)
+
+    # Find the most common cluster (dominant color)
+    dominant_color = centers[np.argmax(np.bincount(labels.flatten()))]
+
+    # Ensure values are properly scaled and converted to standard int
+    dominant_color = tuple(map(int, np.clip(dominant_color, 0, 255)))
+
+    print(f"🎨 Dominant color detected: {dominant_color}")
+    return dominant_color
