@@ -2,12 +2,11 @@ import cv2
 import numpy as np
 from rembg import remove
 
-def remove_background_fast(image_path, target_size=(500, 500)):
+def remove_background_fast(image, target_size=(500, 500)):
     """Removes background using rembg while preserving original colors."""
     print("⚡ Removing background...")
 
     # Read the image
-    image = cv2.imread(image_path, cv2.IMREAD_UNCHANGED)
     if image is None:
         raise ValueError("Error: Image not found.")
 

@@ -8,9 +8,10 @@ from utils.color_wheel import get_colors, get_complementary_color, get_dominant_
 from utils.text_utils import add_text
 from utils.bg_remover import remove_background_fast
 from utils.image_filters import apply_tint_filter, decrease_contrast, process_background_image
-from utils.overlay_utils import overlay_image, create_fade_to_transparent, add_images
+from utils.overlay_utils import overlay_image, create_fade_to_transparent, add_images, generate_gradient_mask_from_image
 from utils.file_utils import save_poster, load_image_rgb, get_unique_filename
 from utils.blending_modes import blend_overlay
+from utils.masking import apply_mask
 
 def generate_poster(image_path, bg_pattern_source):
     """Main function that generates the poster."""
@@ -18,20 +19,25 @@ def generate_poster(image_path, bg_pattern_source):
 
 
     left_bg, right_bg, text_color = get_colors(image_path)
-    cutout = remove_background_fast(image_path)
+    profile_pic = cv2.imread(image_path,cv2.IMREAD_UNCHANGED )
+    cutout = remove_background_fast(profile_pic)
     background = create_gradient_rectangle(left_bg, right_bg)
 
     low_contrast = decrease_contrast(cutout, 0.1)
-    tinted = apply_tint_filter(low_contrast, right_bg, strength=0.2)
+    tinted_cutout = apply_tint_filter(low_contrast, right_bg, strength=0.2)
+    gradient_mask = generate_gradient_mask_from_image(profile_pic, fade_strength=1, interploation= "quadratic")
+    masked_cutout = apply_mask(tinted_cutout, gradient_mask)
 
+    debug_save_gradient_mask(gradient_mask)
     background = cv2.cvtColor(background, cv2.COLOR_RGB2RGBA)
 
     bg_pattern = process_background_image(bg_pattern_source, opacity=0.2)
 
+    bg_pattern = apply_mask(bg_pattern, generate_gradient_mask_from_image(bg_pattern, interploation="linear"))
     background = add_images(background, bg_pattern)
     background = add_text(background, "#Open to Work", text_color)
 
-    poster = overlay_image(background.copy(), tinted)
+    poster = overlay_image(background.copy(), masked_cutout)
 
     fade_gradient = create_fade_to_transparent(left_bg, fade_strength=1.5)
     poster = add_images(poster, fade_gradient)
@@ -75,9 +81,41 @@ def plot_colors(image_path, output_name):
     plt.savefig(path) # Save the figure as an image
     print(f"✅ Color visualization saved as '{path}'")
 
+def debug_save_gradient_mask(mask, filename="debug_mask.png", show=False):
+        """
+        Saves and optionally displays a grayscale gradient mask for debugging.
+
+        Parameters:
+        - mask (np.ndarray): The gradient mask (grayscale, 0-255).
+        - filename (str): Name of the output file.
+        - show (bool): If True, displays the mask in an OpenCV window.
+
+        Returns:
+        - None
+        """
+        print(f"🖼️ Saving gradient mask as '{filename}'...")
+
+        # Ensure mask is in correct grayscale format
+        if len(mask.shape) == 3:
+            mask = cv2.cvtColor(mask, cv2.COLOR_BGR2GRAY)
+
+        # Save the mask
+        cv2.imwrite(filename, mask)
+        print(f"✅ Gradient mask saved: {filename}")
+
+        # Optionally show the mask
+        if show:
+            cv2.imshow("Gradient Mask Debug", mask)
+            cv2.waitKey(0)
+            cv2.destroyAllWindows()
+
 # Example Usage
 if __name__ == "__main__":
-    image_path = "sample-image/ali.jpg"
+    image_path = "sample-image/payam.png"
     bg_pattern_source = "background-patterns/soroosh-pattern-bg.png"
+
+    pic = cv2.imread(image_path, cv2.IMREAD_UNCHANGED)
+    mask = generate_gradient_mask_from_image(pic,fade_strength=0.7)
+    # debug_save_gradient_mask(mask)
     output = generate_poster(image_path, bg_pattern_source)
     plot_colors(image_path, output)
