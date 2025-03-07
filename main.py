@@ -12,12 +12,17 @@ from utils.overlay_utils import overlay_image, create_fade_to_transparent, add_i
 from utils.file_utils import save_poster, load_image_rgb, get_unique_filename
 from utils.blending_modes import blend_overlay
 from utils.masking import apply_mask
+from user_utils.Profile import Profile
 
-person_name = "Soroosh Esmailian"
-person_header = "Backend Developer | Software Engineer | Security Engineer"
-def generate_poster(image_path, bg_pattern_source):
+def generate_poster(user_profile: Profile):
     """Main function that generates the poster."""
     print("\n🚀 Starting Poster Generation Pipeline...")
+
+    image_path = user_profile.picture
+    bg_pattern_source = user_profile.pattern_bg
+
+    person_name = user_profile.name
+    person_header = user_profile.header
 
 
     left_bg, right_bg, text_color = get_colors(image_path)
@@ -87,17 +92,7 @@ def plot_colors(image_path, output_name):
     print(f"✅ Color visualization saved as '{path}'")
 
 def debug_save_gradient_mask(mask, filename="debug_mask.png", show=False):
-        """
-        Saves and optionally displays a grayscale gradient mask for debugging.
 
-        Parameters:
-        - mask (np.ndarray): The gradient mask (grayscale, 0-255).
-        - filename (str): Name of the output file.
-        - show (bool): If True, displays the mask in an OpenCV window.
-
-        Returns:
-        - None
-        """
         print(f"🖼️ Saving gradient mask as '{filename}'...")
 
         # Ensure mask is in correct grayscale format
@@ -116,13 +111,39 @@ def debug_save_gradient_mask(mask, filename="debug_mask.png", show=False):
 
 # Example Usage
 if __name__ == "__main__":
-    image_path = "sample-image/payam.png"
-    bg_pattern_source = "background-patterns/soroosh-pattern-bg.png"
-    person_name = "Payam Ranjbar"
-    # person_name = "Soroosh Esmailian"
-    person_header = "Backend Developer | Software Engineer | Security Engineer"
-    pic = cv2.imread(image_path, cv2.IMREAD_UNCHANGED)
+
+    payam = Profile(name="Payam Ranjbar",
+                    header = "Unity Developer | Software Engineer | Technical Game Designer",
+                    picture = "sample-image/payam.png",
+                    pattern_bg = "background-patterns/payam-pattern-bg-2.png")
+
+    soroosh = Profile(name="Soroosh Esmalian",
+                    header = "Backend Developer | Skilled in Next.js, Django, Express.js, Java, AWS | Master's in CS | Interested in CyberSecurity",
+                    picture = "sample-image/soroosh-head.jpg",
+                    pattern_bg = "background-patterns/soroosh-pattern-bg.png")
+
+    pezh = Profile(name=" Pezhvak Moghaddasi",
+                    header = "MSc Chemist | Electrochemist | Computational Materials Scientist",
+                    picture = "sample-image/pezhvak-head.jpg",
+                    pattern_bg = "background-patterns/pezh-pattern-2.png")
+
+    drvoid = Profile (name="Ali M. Dehaghi",
+                    header = "PhD Candidate | Computer Vision Researcher",
+                    picture = "sample-image/drvoid.png",
+                    pattern_bg = "background-patterns/drvoid-pattern-bg.png")
+
+    ali = Profile(name="Ali Salmani",
+                    header = "Software Engineer, AI and Machine Learning",
+                    picture = "sample-image/ali.png",
+                    pattern_bg = "background-patterns/alis-p-2.png")
+
+    pic = cv2.imread(payam.picture, cv2.IMREAD_UNCHANGED)
     # mask = generate_gradient_mask_from_image(pic,fade_strength=0.7)
     # debug_save_gradient_mask(mask)
-    output = generate_poster(image_path, bg_pattern_source)
-    plot_colors(image_path, output)
+    user = ali
+    output = generate_poster(payam)
+    output = generate_poster(soroosh)
+    output = generate_poster(pezh)
+    output = generate_poster(drvoid)
+    output = generate_poster(ali)
+    # plot_colors(user.picture, output)
