@@ -3,8 +3,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib
 matplotlib.use("Agg")
-from utils.color_utils import extract_colors, create_gradient_rectangle, get_dominant_color
-from utils.color_wheel import get_analogous_colors, get_complementary_color, get_best_text_color
+from utils.color_utils import extract_colors, create_gradient_rectangle
+from utils.color_wheel import get_colors, get_complementary_color, get_dominant_color
 from utils.text_utils import add_text
 from utils.bg_remover import remove_background_fast
 from utils.image_filters import apply_tint_filter, decrease_contrast, process_background_image
@@ -12,23 +12,12 @@ from utils.overlay_utils import overlay_image, create_fade_to_transparent, add_i
 from utils.file_utils import save_poster, load_image_rgb, get_unique_filename
 from utils.blending_modes import blend_overlay
 
-
-def get_colors(image_path):
-    base_image = load_image_rgb(image_path)
-    dom_color = get_dominant_color(base_image)
-    complementary_color = get_complementary_color(dom_color)
-    left_bg, right_bg = get_analogous_colors(dom_color)
-    text_color = complementary_color
-    return left_bg, right_bg, text_color
-
 def generate_poster(image_path, bg_pattern_source):
     """Main function that generates the poster."""
     print("\n🚀 Starting Poster Generation Pipeline...")
 
-    # left_bg, right_bg, text_color = extract_colors(image_path)
 
     left_bg, right_bg, text_color = get_colors(image_path)
-    # Load images and process colors
     cutout = remove_background_fast(image_path)
     background = create_gradient_rectangle(left_bg, right_bg)
 
@@ -44,7 +33,7 @@ def generate_poster(image_path, bg_pattern_source):
 
     poster = overlay_image(background.copy(), tinted)
 
-    fade_gradient = create_fade_to_transparent(right_bg, fade_strength=1)
+    fade_gradient = create_fade_to_transparent(left_bg, fade_strength=1.5)
     poster = add_images(poster, fade_gradient)
 
     # 🔹 Save the final poster using `save_poster()`
@@ -88,7 +77,7 @@ def plot_colors(image_path, output_name):
 
 # Example Usage
 if __name__ == "__main__":
-    image_path = "sample-image/ali.png"
+    image_path = "sample-image/ali.jpg"
     bg_pattern_source = "background-patterns/soroosh-pattern-bg.png"
     output = generate_poster(image_path, bg_pattern_source)
     plot_colors(image_path, output)

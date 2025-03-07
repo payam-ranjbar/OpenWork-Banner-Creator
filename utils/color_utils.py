@@ -21,47 +21,18 @@ def extract_colors(image_path):
 
 
 def create_gradient_rectangle(color1, color2, width=1920, height=1080):
-    """Creates a horizontal linear gradient between two colors."""
+    """Vectorized gradient creation for better performance."""
+
     gradient = np.zeros((height, width, 3), dtype=np.uint8)
-    for x in range(width):
-        alpha = x / (width - 1)
-        gradient[:, x] = (1 - alpha) * np.array(color1) + alpha * np.array(color2)
-    return gradient
+    color1 = np.array(color1, dtype=np.float32)
+    color2 = np.array(color2, dtype=np.float32)
 
+    # Create alpha values for each column
+    alpha = np.linspace(0, 1, width, dtype=np.float32)
 
-def get_dominant_color(image):
-    """
-    Detects the dominant color in an image.
+    # Vectorized interpolation
+    gradient = (1 - alpha)[:, np.newaxis] * color1 + alpha[:, np.newaxis] * color2
+    gradient = np.tile(gradient[np.newaxis, :, :], (height, 1, 1))  # Repeat for all rows
 
-    Parameters:
-    - image (np.ndarray): Input image in BGR format.
+    return gradient.astype(np.uint8)
 
-    Returns:
-    - tuple[int, int, int]: The dominant RGB color.
-"""
-    print("🎨 Detecting dominant color...")
-
-    # Convert to RGB (since OpenCV loads in BGR)
-    image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-
-    # Resize image to speed up processing
-    small_image = cv2.resize(image, (50, 50))  # Reduce size for faster processing
-
-    # Reshape the image to be a list of pixels
-    pixels = small_image.reshape(-1, 3)
-
-    # Use k-means clustering to find the dominant color
-    num_clusters = 3  # Using 3 clusters to avoid noise
-    pixels = np.float32(pixels)
-
-    criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 10, 1.0)
-    _, labels, centers = cv2.kmeans(pixels, num_clusters, None, criteria, 10, cv2.KMEANS_RANDOM_CENTERS)
-
-    # Find the most common cluster (dominant color)
-    dominant_color = centers[np.argmax(np.bincount(labels.flatten()))]
-
-    # Ensure values are properly scaled and converted to standard int
-    dominant_color = tuple(map(int, np.clip(dominant_color, 0, 255)))
-
-    print(f"🎨 Dominant color detected: {dominant_color}")
-    return dominant_color

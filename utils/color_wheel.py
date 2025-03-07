@@ -1,103 +1,253 @@
 import colorsys
 
-def get_complementary_color(color):
+import cv2
+import numpy as np
+
+
+def bgr_to_hsv(bgr_color):
+    """Convert BGR color to HSV."""
+    return cv2.cvtColor(np.uint8([[bgr_color]]), cv2.COLOR_BGR2HSV)[0][0]
+
+
+def hsv_to_bgr(hsv_color):
+    """Convert HSV color to BGR."""
+    return cv2.cvtColor(np.uint8([[hsv_color]]), cv2.COLOR_HSV2BGR)[0][0]
+
+
+def get_analogous_colors(bgr_color, n=3, offset=30):
     """
-    Computes the complementary color of a given RGB color.
+    Generate analogous colors.
+    :param bgr_color: Input BGR color.
+    :param n: Number of colors to generate.
+    :param offset: Hue offset in degrees.
+    :return: List of BGR colors.
+    """
+    hsv_color = bgr_to_hsv(bgr_color)
+    h, s, v = hsv_color
+    return [hsv_to_bgr(((h + i * offset) % 180, s, v)) for i in range(n)]
+
+
+def get_complementary_color(bgr_color, boost_s=1, boost_v=1.2):
+    """
+    Generate a more vibrant complementary color.
+    :param bgr_color: Input BGR color.
+    :param boost_s: Multiplier to increase saturation (default: 1.5).
+    :param boost_v: Multiplier to increase value (default: 1.2).
+    :return: Vibrant complementary BGR color.
+    """
+    hsv_color = bgr_to_hsv(bgr_color)
+    h, s, v = hsv_color
+
+    # Calculate complementary hue
+    comp_h = (h + 90) % 180
+
+    # Boost saturation and value
+    comp_s = min(s * boost_s, 255)  # Ensure saturation doesn't exceed 255
+    comp_v = min(v * boost_v, 255)  # Ensure value doesn't exceed 255
+
+    # Convert back to BGR
+    return hsv_to_bgr((comp_h, comp_s, comp_v))
+
+
+def get_triadic_colors(bgr_color):
+    """
+    Generate triadic colors.
+    :param bgr_color: Input BGR color.
+    :return: List of 3 BGR colors.
+    """
+    hsv_color = bgr_to_hsv(bgr_color)
+    h, s, v = hsv_color
+    return [hsv_to_bgr(((h + i * 60) % 180, s, v)) for i in range(3)]
+
+
+def get_tetradic_colors(bgr_color):
+    """
+    Generate tetradic colors.
+    :param bgr_color: Input BGR color.
+    :return: List of 4 BGR colors.
+    """
+    hsv_color = bgr_to_hsv(bgr_color)
+    h, s, v = hsv_color
+    return [hsv_to_bgr(((h + i * 45) % 180, s, v)) for i in range(4)]
+
+
+def get_split_complementary_colors(bgr_color):
+    """
+    Generate split-complementary colors.
+    :param bgr_color: Input BGR color.
+    :return: List of 3 BGR colors.
+    """
+    hsv_color = bgr_to_hsv(bgr_color)
+    h, s, v = hsv_color
+    return [hsv_to_bgr(((h + i * 150) % 180, s, v)) for i in range(3)]
+
+
+def square_colors(bgr_color):
+    """
+    Generate square colors.
+    :param bgr_color: Input BGR color.
+    :return: List of 4 BGR colors.
+    """
+    hsv_color = bgr_to_hsv(bgr_color)
+    h, s, v = hsv_color
+    return [hsv_to_bgr(((h + i * 90) % 180, s, v)) for i in range(4)]
+
+
+def increase_saturation(bgr_color, saturation_boost=1.5):
+    """
+    Increases the saturation of a BGR color.
 
     Parameters:
-    - color (tuple[int, int, int]): The input RGB color.
+    - bgr_color (tuple[int, int, int]): Input BGR color.
+    - saturation_boost (float): Multiplier to increase saturation (default: 1.5).
 
     Returns:
-    - tuple[int, int, int]: The complementary RGB color.
+    - tuple[int, int, int]: BGR color with increased saturation.
     """
-    print(f"🌈 Calculating complementary color for {color}...")
+    # Convert BGR to HSV
+    hsv_color = cv2.cvtColor(np.uint8([[bgr_color]]), cv2.COLOR_BGR2HSV)[0][0]
 
-    r, g, b = map(lambda x: x / 255.0, color)  # Normalize to 0-1
+    # Increase saturation
+    h, s, v = hsv_color
+    s = min(s * saturation_boost, 255)  # Ensure saturation doesn't exceed 255
 
-    # Convert RGB to HSV
-    h, s, v = colorsys.rgb_to_hsv(r, g, b)
+    # Convert back to BGR
+    new_bgr_color = cv2.cvtColor(np.uint8([[[h, s, v]]]), cv2.COLOR_HSV2BGR)[0][0]
+    return tuple(new_bgr_color)
 
-    # Find complementary hue (shift 180 degrees on color wheel)
-    h_complementary = (h + 0.5) % 1.0  # Rotate hue by 180 degrees
 
-    # Convert back to RGB
-    r_comp, g_comp, b_comp = colorsys.hsv_to_rgb(h_complementary, s, v)
-
-    # Scale back to 0-255
-    complementary_color = tuple(map(lambda x: int(x * 255), (r_comp, g_comp, b_comp)))
-
-    print(f"✅ Complementary color: {complementary_color}")
-    return complementary_color
-
-def get_analogous_colors(color, angle_offset=30):
+def increase_luminance(bgr_color, luminance_boost=1.2):
     """
-    Computes two neighboring analogous colors based on the given RGB color.
+    Increases the luminance (brightness) of a BGR color.
 
     Parameters:
-    - color (tuple[int, int, int]): The input RGB color.
-    - angle_offset (int): The offset in degrees for analogous colors (default is 30 degrees).
+    - bgr_color (tuple[int, int, int]): Input BGR color.
+    - luminance_boost (float): Multiplier to increase luminance (default: 1.2).
 
     Returns:
-    - tuple[tuple[int, int, int], tuple[int, int, int]]: Two analogous RGB colors.
+    - tuple[int, int, int]: BGR color with increased luminance.
     """
-    print(f"🎨 Calculating analogous colors for {color}...")
+    # Convert BGR to HSV
+    hsv_color = cv2.cvtColor(np.uint8([[bgr_color]]), cv2.COLOR_BGR2HSV)[0][0]
 
-    r, g, b = map(lambda x: x / 255.0, color)  # Normalize to 0-1
+    # Increase luminance (Value)
+    h, s, v = hsv_color
+    v = min(v * luminance_boost, 255)  # Ensure value doesn't exceed 255
 
-    # Convert RGB to HSV
-    h, s, v = colorsys.rgb_to_hsv(r, g, b)
+    # Convert back to BGR
+    new_bgr_color = cv2.cvtColor(np.uint8([[[h, s, v]]]), cv2.COLOR_HSV2BGR)[0][0]
+    return tuple(new_bgr_color)
 
-    # Convert degrees to the range of 0-1 (hue in HSV is between 0 and 1)
-    angle_offset = angle_offset / 360.0
 
-    # Compute analogous hues (shifting left and right on the color wheel)
-    h1 = (h + angle_offset) % 1.0  # Shift hue forward
-    h2 = (h - angle_offset) % 1.0  # Shift hue backward
-
-    # Convert back to RGB
-    r1, g1, b1 = colorsys.hsv_to_rgb(h1, s, v)
-    r2, g2, b2 = colorsys.hsv_to_rgb(h2, s, v)
-
-    # Scale RGB values back to 0-255 range
-    analogous_color_1 = tuple(map(lambda x: int(x * 255), (r1, g1, b1)))
-    analogous_color_2 = tuple(map(lambda x: int(x * 255), (r2, g2, b2)))
-
-    print(f"✅ Analogous colors: {analogous_color_1}, {analogous_color_2}")
-    return analogous_color_1, analogous_color_2
-
-import colorsys
-
-def get_best_text_color(background_color):
+def get_dominant_color(image):
     """
-    Determines an appealing and readable text color for a given background color.
+    Detects the dominant color in an image.
 
     Parameters:
-    - background_color (tuple[int, int, int]): The background color in RGB (0-255).
+    - image (np.ndarray): Input image in BGR format.
 
     Returns:
-    - tuple[int, int, int]: The suggested text color in RGB (0-255).
+    - tuple[int, int, int]: The dominant color in **BGR** format (OpenCV-compatible).
     """
-    print(f"🎨 Finding the best text color for background {background_color}...")
+    print("🎨 Detecting dominant color...")
 
-    # Convert background color to HSV
-    r, g, b = background_color
-    h, s, v = colorsys.rgb_to_hsv(r / 255.0, g / 255.0, b / 255.0)
 
-    # Generate complementary color (opposite on the color wheel)
-    h_complementary = (h + 0.5) % 1.0
-    r_comp, g_comp, b_comp = colorsys.hsv_to_rgb(h_complementary, s, v)
-    complementary_color = (int(r_comp * 255), int(g_comp * 255), int(b_comp * 255))
+    if image.shape[-1] == 4:  # If RGBA, remove alpha channel
+        image = image[:, :, :3]  # Keep only RGB/BGR channels
+    # Resize image to speed up processing
+    small_image = cv2.resize(image, (50, 50))  # Keep in BGR format
 
-    # Determine brightness of the background color (YIQ formula)
-    brightness = (r * 299 + g * 587 + b * 114) / 1000
+    # Reshape the image to be a list of pixels
+    pixels = small_image.reshape(-1, 3)
 
-    # If the background is dark, use a bright color (white/gold), otherwise use black
-    if brightness < 128:
-        # Use a bright color (Gold, White, or Complementary)
-        best_text_color = (255, 215, 0) if complementary_color == background_color else complementary_color
-    else:
-        # Use a dark color (Black)
-        best_text_color = (0, 0, 0)
+    # Use k-means clustering to find the dominant color
+    num_clusters = 3
+    criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 10, 1.0)
+    _, labels, centers = cv2.kmeans(
+        np.float32(pixels),  # Input must be float32
+        num_clusters,
+        None,
+        criteria,
+        10,
+        cv2.KMEANS_RANDOM_CENTERS
+    )
 
-    print(f"✅ Best text color: {best_text_color}")
-    return best_text_color
+    # Find the most common cluster (dominant color)
+    dominant_color = centers[np.argmax(np.bincount(labels.flatten()))]
+
+    # Convert to integer BGR tuple (0-255)
+    dominant_color = tuple(np.uint8(dominant_color))
+
+    print(f"🎨 Dominant color detected: {dominant_color}")
+    # dominant_color = increase_saturation(dominant_color, 2)
+    # dominant_color = increase_luminance(dominant_color, 2)
+
+    return dominant_color  # Already in BGR format
+
+
+
+def get_text_color(left_bg, right_bg):
+    # Previous contrast calculation remains the same
+    light = (255, 247, 216)
+    dark = (27, 31, 40)
+
+    # Calculate contrast ratios
+    contrast_white_left = get_contrast_ratio(light, left_bg)
+    contrast_white_right = get_contrast_ratio(light, right_bg)
+    min_white = min(contrast_white_left, contrast_white_right)
+
+    contrast_black_left = get_contrast_ratio(dark, left_bg)
+    contrast_black_right = get_contrast_ratio(dark, right_bg)
+    min_black = min(contrast_black_left, contrast_black_right)
+
+
+
+    # Choose color with  minimum contrast
+    return light if min_white > min_black else dark
+
+
+def get_colors(image_path, dominant_color=None):
+    image = cv2.imread(image_path)
+    image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+
+    # Downsample image for faster processing
+    small_img = cv2.resize(image, (100, 100), interpolation=cv2.INTER_AREA)
+
+    if dominant_color is None:
+        dominant_color = get_dominant_color(small_img)
+    sat_increase = 2.5
+    comp_color = get_complementary_color(dominant_color)
+    _, left_bg, right_bg = get_analogous_colors(comp_color)
+    text_color = get_text_color(left_bg, right_bg)
+
+    left_bg = rgb_to_bgr(left_bg)
+    right_bg = rgb_to_bgr(right_bg)
+    text_color = rgb_to_bgr(text_color)
+    left_bg, right_bg = increase_saturation(left_bg, sat_increase), increase_saturation(right_bg, sat_increase)
+
+    return left_bg, right_bg, text_color
+
+
+def get_relative_luminance(color):
+    r, g, b = color
+    r = r / 255.0
+    g = g / 255.0
+    b = b / 255.0
+
+    # Convert to linear RGB
+    r = r if r <= 0.03928 else ((r + 0.055) / 1.055) ** 2.4
+    g = g if g <= 0.03928 else ((g + 0.055) / 1.055) ** 2.4
+    b = b if b <= 0.03928 else ((b + 0.055) / 1.055) ** 2.4
+
+    return 0.2126 * r + 0.7152 * g + 0.0722 * b
+
+
+def get_contrast_ratio(color1, color2):
+    l1 = get_relative_luminance(color1)
+    l2 = get_relative_luminance(color2)
+    return (max(l1, l2) + 0.05) / (min(l1, l2) + 0.05)
+
+
+def rgb_to_bgr(color):
+    """Converts an RGB color to BGR."""
+    return color[::-1]
