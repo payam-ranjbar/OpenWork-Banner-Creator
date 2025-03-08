@@ -38,5 +38,4 @@ def generate_banner(profile: Profile, color_palette: ColorPalette = None):
 
     output_path = get_unique_filename("assets/banners", f"{person_name}_banner.png")
     cv2.imwrite(output_path, poster)
-    print(f"✅ Banner saved at: {output_path}")
     return output_path
