@@ -43,7 +43,7 @@ def plot_colors(image_path):
 
     # Adjust layout and save the figure
     plt.tight_layout()
-    path = get_unique_filename("color-palette", "pallet.png")
+    path = get_unique_filename("../assets/color-palette", "pallet.png")
     plt.savefig(path)  # Save the figure as an image
     print(f"✅ Color visualization saved as '{path}'")
 
@@ -52,5 +52,5 @@ def plot_colors(image_path):
 # Example Usage
 
 if __name__ == "__main__":
-    image_path = "sample-image/drvoid.png"  # Update this path
+    image_path = "../assets/sample-image/drvoid.png"  # Update this path
     plot_colors(image_path)

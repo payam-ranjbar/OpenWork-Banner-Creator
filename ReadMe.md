@@ -37,7 +37,7 @@ A dynamic poster generator tailored for LinkedIn profiles. Creates professional 
 
 2. **Create a Profile**:
    ```python
-   from user_utils.Profile import Profile
+   from models.Profile import Profile
 
    user = Profile(
        name="Payam Ranjbar",
@@ -49,13 +49,13 @@ A dynamic poster generator tailored for LinkedIn profiles. Creates professional 
 
 3. **Generate Poster**:
    ```python
-   from main import generate_poster
+   from tests.poster_generation_test import generate_poster
    output_filename = generate_poster(user)
    ```
 
 4. **View Color Palette** (Optional):
    ```python
-   from main import plot_colors
+   from tests.poster_generation_test import plot_colors
    plot_colors(user.picture, output_filename)
    ```
 

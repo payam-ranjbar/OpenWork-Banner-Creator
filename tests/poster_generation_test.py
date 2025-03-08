@@ -12,7 +12,7 @@ from utils.overlay_utils import overlay_image, create_fade_to_transparent, add_i
 from utils.file_utils import save_poster, load_image_rgb, get_unique_filename
 from utils.blending_modes import blend_overlay
 from utils.masking import apply_mask
-from user_utils.Profile import Profile
+from models.Profile import Profile
 
 def generate_poster(user_profile: Profile):
     """Main function that generates the poster."""
@@ -114,28 +114,28 @@ if __name__ == "__main__":
 
     payam = Profile(name="John Se",
                     header = "Unity Developer | Software Engineer | Technical Game Designer",
-                    picture = "sample-image/yaro4.png",
-                    pattern_bg = "background-patterns/payam-pattern-bg-2.png")
+                    picture = "../assets/sample-image/yaro4.png",
+                    pattern_bg = "../assets/background-patterns/payam-pattern-bg-2.png")
 
     soroosh = Profile(name="Alvine Soladana",
                     header = "Backend Developer | Skilled in Next.js, Django, Express.js, Java, AWS | Master's in CS | Interested in CyberSecurity",
-                    picture = "sample-image/yaro-2.png",
-                    pattern_bg = "background-patterns/soroosh-pattern-bg.png")
+                    picture = "../assets/sample-image/yaro-2.png",
+                    pattern_bg = "../assets/background-patterns/soroosh-pattern-bg.png")
 
     pezh = Profile(name=" Petrouz Wozsi",
                     header = "MSc Chemist | Electrochemist | Computational Materials Scientist",
-                    picture = "sample-image/yaro-1.png",
-                    pattern_bg = "background-patterns/pezh-pattern-2.png")
+                    picture = "../assets/sample-image/yaro-1.png",
+                    pattern_bg = "../assets/background-patterns/pezh-pattern-2.png")
 
     drvoid = Profile (name="Silva Angre",
                     header = "PhD Candidate | Computer Vision Researcher",
-                    picture = "sample-image/yaro-3.png",
-                    pattern_bg = "background-patterns/drvoid-pattern-bg.png")
+                    picture = "../assets/sample-image/yaro-3.png",
+                    pattern_bg = "../assets/background-patterns/drvoid-pattern-bg.png")
 
     ali = Profile(name="Ali Salmani",
                     header = "Software Engineer, AI and Machine Learning",
-                    picture = "sample-image/ali.png",
-                    pattern_bg = "background-patterns/alis-p-2.png")
+                    picture = "../assets/sample-image/ali.png",
+                    pattern_bg = "../assets/background-patterns/alis-p-2.png")
 
     pic = cv2.imread(payam.picture, cv2.IMREAD_UNCHANGED)
     # mask = generate_gradient_mask_from_image(pic,fade_strength=0.7)
