@@ -1,15 +1,14 @@
 import cv2
-import numpy as np
 
-from utils.color_utils import create_gradient_rectangle
-from utils.bg_remover import remove_background_fast
-from utils.image_filters import decrease_contrast, apply_tint_filter, process_background_image, apply_gaussian_blur
-from utils.masking import apply_mask
-from utils.overlay_utils import overlay_image, add_images, create_fade_to_transparent, generate_gradient_mask_from_image
-from utils.text_utils import add_text_center, add_text_fit_width, add_text
-from utils.file_utils import save_poster
-from models.Profile import Profile
-from models.ColorPaletteGenerator import ColorPaletteGenerator, ColorPalette
+from src.utils.color_utils import create_gradient_rectangle
+from src.utils.bg_remover import remove_background_fast
+from src.utils.image_filters import decrease_contrast, apply_tint_filter, process_background_image, apply_gaussian_blur
+from src.utils.masking import apply_mask
+from src.utils.overlay_utils import overlay_image, add_images, create_fade_to_transparent, generate_gradient_mask_from_image
+from src.utils.text_utils import add_text_center, add_text_fit_width, add_text
+from src.utils.file_utils import save_poster
+from src.models.Profile import Profile
+from src.models.ColorPaletteGenerator import ColorPaletteGenerator, ColorPalette
 
 
 def banner_service(profile: Profile, color_palette: ColorPalette = None):

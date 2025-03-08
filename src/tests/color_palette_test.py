@@ -1,9 +1,7 @@
 import numpy as np
-import cv2
-from utils.color_wheel import get_complementary_color, get_colors, get_dominant_color,get_analogous_colors, increase_saturation
-from utils.bg_remover import remove_background_fast
-from utils.file_utils import load_image_rgb
-from utils.file_utils import get_unique_filename
+from src.utils.color_wheel import get_complementary_color, get_colors, get_dominant_color
+from src.utils.file_utils import load_image_rgb
+from src.utils.file_utils import get_unique_filename
 import matplotlib.pyplot as plt
 import matplotlib
 matplotlib.use("Agg")
@@ -52,5 +50,5 @@ def plot_colors(image_path):
 # Example Usage
 
 if __name__ == "__main__":
-    image_path = "../assets/sample-image/drvoid.png"  # Update this path
+    image_path = "../../assets/sample-image/drvoid.png"  # Update this path
     plot_colors(image_path)

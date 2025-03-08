@@ -3,16 +3,15 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib
 matplotlib.use("Agg")
-from utils.color_utils import create_gradient_rectangle
-from utils.color_wheel import get_colors, get_complementary_color, get_dominant_color
-from utils.text_utils import add_text, add_text_center, add_text_fit_width , add_text_center_first_letter_larger
-from utils.bg_remover import remove_background_fast
-from utils.image_filters import apply_tint_filter, decrease_contrast, process_background_image, apply_gaussian_blur
-from utils.overlay_utils import overlay_image, create_fade_to_transparent, add_images, generate_gradient_mask_from_image
-from utils.file_utils import save_poster, load_image_rgb, get_unique_filename
-from utils.blending_modes import blend_overlay
-from utils.masking import apply_mask
-from models.Profile import Profile
+from src.utils.color_utils import create_gradient_rectangle
+from src.utils.color_wheel import get_colors, get_complementary_color, get_dominant_color
+from src.utils.text_utils import add_text, add_text_center, add_text_fit_width
+from src.utils.bg_remover import remove_background_fast
+from src.utils.image_filters import apply_tint_filter, decrease_contrast, process_background_image, apply_gaussian_blur
+from src.utils.overlay_utils import overlay_image, create_fade_to_transparent, add_images, generate_gradient_mask_from_image
+from src.utils.file_utils import save_poster, load_image_rgb, get_unique_filename
+from src.utils.masking import apply_mask
+from src.models.Profile import Profile
 
 def generate_poster(user_profile: Profile):
     """Main function that generates the poster."""

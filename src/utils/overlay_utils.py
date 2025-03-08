@@ -1,6 +1,6 @@
 import cv2
 import numpy as np
-from utils.blending_modes import blend_normal
+from src.utils.blending_modes import blend_normal
 def overlay_image(bg, fg):
     """Overlays the cutout image onto the background while maintaining aspect ratio."""
     print("🔗 Overlaying subject on background...")

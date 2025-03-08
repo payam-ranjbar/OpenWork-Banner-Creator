@@ -1,11 +1,10 @@
-import cv2
 import numpy as np
 import os
 import matplotlib.pyplot as plt
-from utils.color_wheel import (
+from src.utils.color_wheel import (
     get_dominant_color, get_complementary_color, get_colors
 )
-from utils.file_utils import get_unique_filename, load_image_rgb
+from src.utils.file_utils import get_unique_filename, load_image_rgb
 
 from pydantic import BaseModel
 

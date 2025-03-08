@@ -3,7 +3,7 @@ import numpy as np
 from PIL import ImageFont, ImageDraw, Image
 
 # Path to the custom font file (update this with your actual font)
-FONT_PATH = "../assets/Anton-Regular.ttf"
+FONT_PATH = "../../assets/Anton-Regular.ttf"
 
 
 def add_text(image, text, color, max_font_size=500, min_font_size=60, letter_spacing=30, y_offset=0):
