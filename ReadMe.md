@@ -2,7 +2,11 @@
 
 A dynamic poster generator tailored for LinkedIn profiles. Creates professional "Open to Work" banners with custom color schemes derived from your profile picture. *No OpenAI integration—uses smart color analysis and user-provided patterns for backgrounds.*
 
----
+## Poster Examples
+| [<img src="https://payam.pro/wp-content/uploads/2025/03/payam-poster.png" width="300" alt="Tech Poster">](#) | [<img src="https://payam.pro/wp-content/uploads/2025/03/yaro4-poster.png" width="300" alt="Academic Poster">](#) |
+|:---:|:---:|
+| [<img src="https://payam.pro/wp-content/uploads/2025/03/yaro-2-poster.png" width="300" alt="Developer Poster">](#) | [<img src="https://payam.pro/wp-content/uploads/2025/03/yaro-1-poster.png" width="300" alt="Research Poster">](#) |
+
 
 ## Features
 - **Smart Color Extraction**: Dominant & complementary colors extracted from your profile picture.
@@ -83,3 +87,4 @@ A dynamic poster generator tailored for LinkedIn profiles. Creates professional 
 
 - **Performance**: Optimized for speed (resizing + k-means color clustering).
 - **Transparency**: All outputs are PNGs with alpha channels.
+

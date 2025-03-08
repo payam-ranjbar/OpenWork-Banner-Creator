@@ -112,24 +112,24 @@ def debug_save_gradient_mask(mask, filename="debug_mask.png", show=False):
 # Example Usage
 if __name__ == "__main__":
 
-    payam = Profile(name="Payam Ranjbar",
+    payam = Profile(name="John Se",
                     header = "Unity Developer | Software Engineer | Technical Game Designer",
-                    picture = "sample-image/payam.png",
+                    picture = "sample-image/yaro4.png",
                     pattern_bg = "background-patterns/payam-pattern-bg-2.png")
 
-    soroosh = Profile(name="Soroosh Esmalian",
+    soroosh = Profile(name="Alvine Soladana",
                     header = "Backend Developer | Skilled in Next.js, Django, Express.js, Java, AWS | Master's in CS | Interested in CyberSecurity",
-                    picture = "sample-image/soroosh-head.jpg",
+                    picture = "sample-image/yaro-2.png",
                     pattern_bg = "background-patterns/soroosh-pattern-bg.png")
 
-    pezh = Profile(name=" Pezhvak Moghaddasi",
+    pezh = Profile(name=" Petrouz Wozsi",
                     header = "MSc Chemist | Electrochemist | Computational Materials Scientist",
-                    picture = "sample-image/pezhvak-head.jpg",
+                    picture = "sample-image/yaro-1.png",
                     pattern_bg = "background-patterns/pezh-pattern-2.png")
 
-    drvoid = Profile (name="Ali M. Dehaghi",
+    drvoid = Profile (name="Silva Angre",
                     header = "PhD Candidate | Computer Vision Researcher",
-                    picture = "sample-image/drvoid.png",
+                    picture = "sample-image/yaro-3.png",
                     pattern_bg = "background-patterns/drvoid-pattern-bg.png")
 
     ali = Profile(name="Ali Salmani",
@@ -145,5 +145,5 @@ if __name__ == "__main__":
     output = generate_poster(soroosh)
     output = generate_poster(pezh)
     output = generate_poster(drvoid)
-    output = generate_poster(ali)
+    # output = generate_poster(ali)
     # plot_colors(user.picture, output)
