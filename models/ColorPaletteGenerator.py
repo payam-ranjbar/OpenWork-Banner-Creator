@@ -20,11 +20,20 @@ class ColorPalette(BaseModel):
 
 class ColorPaletteGenerator:
     def __init__(self, image_path):
-        """Extracts a color palette from an image."""
         self.image_path = image_path
         self._base_image = load_image_rgb(image_path)
         self._extract_colors()
+        print(f"iamge path is on {self.image_path}")
 
+    # def __init__(self, colorPalette:ColorPalette):
+    #
+    #     self._primary_color = colorPalette.primary_color
+    #     self._secondary_color = colorPalette.secondary_color
+    #     self._accent_color_left = colorPalette.accent_color_left
+    #     self._accent_color_right = colorPalette.accent_color_right
+    #     self._text_color = colorPalette.text_color
+    #     self._title_text_color = colorPalette.text_color
+    #     self._subtitle_text_color = colorPalette.text_color
     def _extract_colors(self):
         self._primary_color = get_dominant_color(self._base_image)
         self._secondary_color = get_complementary_color(self._primary_color)
@@ -33,6 +42,8 @@ class ColorPaletteGenerator:
         self._title_text_color = self._text_color
         self._subtitle_text_color = self._text_color
 
+    def __str__(self):
+        return self.get_palette()
     @property
     def primary_color(self):
         return self._primary_color
@@ -51,16 +62,13 @@ class ColorPaletteGenerator:
 
     @property
     def title_text_color(self):
-        return self._title_text_color
+        return self._text_color
 
     @property
     def subtitle_text_color(self):
         return self._subtitle_text_color
 
     def get_palette(self) -> ColorPalette:
-        """
-        Returns a structured color palette as a Pydantic model.
-        """
         return ColorPalette(
             primary_color=self._primary_color,
             secondary_color=self._secondary_color,
@@ -69,7 +77,6 @@ class ColorPaletteGenerator:
             text_color=self._text_color,
         )
     def plot_palette(self):
-        """Visualizes the generated color palette and saves it as a PNG file."""
         labels = [
             "Primary Color", "Secondary Color", "Accent Left", "Accent Right", "Title Text", "Subtitle Text"
         ]
@@ -99,7 +106,7 @@ class ColorPaletteGenerator:
 
         # Adjust layout and save the figure
         plt.tight_layout()
-        os.makedirs("assets/color_palette", exist_ok=True)
+        os.makedirs("../assets/color_palette", exist_ok=True)
         file_name = os.path.basename(self.image_path).split('.')[0] + "_palette.png"
         save_path = get_unique_filename("../assets/color_palette", file_name)
         plt.savefig(save_path)

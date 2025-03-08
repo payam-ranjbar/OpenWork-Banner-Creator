@@ -11,3 +11,4 @@ class Profile(BaseModel):
     header: str
     picture: str
     pattern_bg: Optional[str] = None
+    generated_poster: Optional[str] = None

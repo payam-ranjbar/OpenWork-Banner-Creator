@@ -2,12 +2,12 @@ import cv2
 import numpy as np
 
 from utils.color_utils import create_gradient_rectangle
-from utils.file_utils import get_unique_filename
 from utils.bg_remover import remove_background_fast
 from utils.image_filters import decrease_contrast, apply_tint_filter, process_background_image, apply_gaussian_blur
 from utils.masking import apply_mask
 from utils.overlay_utils import overlay_image, add_images, create_fade_to_transparent, generate_gradient_mask_from_image
 from utils.text_utils import add_text_center, add_text_fit_width
+from utils.file_utils import save_poster
 from models.Profile import Profile
 from models.ColorPaletteGenerator import ColorPaletteGenerator, ColorPalette
 
@@ -17,16 +17,18 @@ def banner_service(profile: Profile, color_palette: ColorPalette = None):
     print("\n🚀 Starting Banner Generation...")
 
     image_path = profile.picture
-    bg_pattern_source = profile.pattern_bg
+    bg_pattern_source = check_pattern(profile)
     person_name = profile.name
     person_header = profile.header
 
     if color_palette is None:
         color_palette = ColorPaletteGenerator(image_path)
 
+
+    print(f"color paletet is: {color_palette}")
     left_bg = color_palette.accent_color_left
     right_bg = color_palette.accent_color_right
-    text_color = color_palette.title_text_color
+    text_color = color_palette.text_color
 
     profile_pic = cv2.imread(image_path, cv2.IMREAD_UNCHANGED)
     cutout = remove_background_fast(profile_pic)
@@ -39,7 +41,10 @@ def banner_service(profile: Profile, color_palette: ColorPalette = None):
     masked_cutout = apply_mask(tinted_cutout, gradient_mask)
 
     background = cv2.cvtColor(background, cv2.COLOR_RGB2RGBA)
-    bg_pattern = process_background_image(bg_pattern_source, opacity=0.2)
+    print(f"pattern is at {bg_pattern_source}")
+
+    bg_pattern = cv2.imread(bg_pattern_source, cv2.IMREAD_UNCHANGED)
+    bg_pattern = process_background_image(bg_pattern, opacity=0.2)
     bg_pattern = apply_mask(bg_pattern, generate_gradient_mask_from_image(bg_pattern, interploation="linear"))
     bg_pattern = apply_gaussian_blur(bg_pattern, 9)
     background = add_images(background, bg_pattern)
@@ -53,8 +58,10 @@ def banner_service(profile: Profile, color_palette: ColorPalette = None):
                                 max_font_size=50)
 
     output_path, output_name = save_poster(poster, image_path)
+    profile.generated_poster = output_name
     print(f"✅ Banner saved at: {output_path}")
-    return output_name
+    return profile
+
 
 def check_pattern(profile: Profile):
-    return None if profile.pattern_bg is None else "../assets/background-patterns/default.png"
+    return "./assets/background-patterns/default.png"
