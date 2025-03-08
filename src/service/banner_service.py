@@ -12,9 +12,6 @@ from src.models.ColorPaletteGenerator import ColorPaletteGenerator, ColorPalette
 
 
 def banner_service(profile: Profile, color_palette: ColorPalette = None):
-    """Generates a professional banner based on the given profile and optional color palette."""
-    print("\n🚀 Starting Banner Generation...")
-
     image_path = profile.picture
     bg_pattern_source = check_pattern(profile)
     person_name = profile.name
@@ -59,9 +56,9 @@ def banner_service(profile: Profile, color_palette: ColorPalette = None):
 
     output_path, output_name = save_poster(poster, image_path)
     profile.generated_poster = output_name
-    print(f"✅ Banner saved at: {output_path}")
+    print(f"Banner saved at: {output_path}")
     return profile
 
 
 def check_pattern(profile: Profile):
-    return "../assets/background-patterns/default.png"
+    return  "../assets/background-patterns/default.png" if profile.pattern_bg is None else profile.pattern_bg
