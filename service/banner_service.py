@@ -6,7 +6,7 @@ from utils.bg_remover import remove_background_fast
 from utils.image_filters import decrease_contrast, apply_tint_filter, process_background_image, apply_gaussian_blur
 from utils.masking import apply_mask
 from utils.overlay_utils import overlay_image, add_images, create_fade_to_transparent, generate_gradient_mask_from_image
-from utils.text_utils import add_text_center, add_text_fit_width
+from utils.text_utils import add_text_center, add_text_fit_width, add_text
 from utils.file_utils import save_poster
 from models.Profile import Profile
 from models.ColorPaletteGenerator import ColorPaletteGenerator, ColorPalette
@@ -48,6 +48,7 @@ def banner_service(profile: Profile, color_palette: ColorPalette = None):
     bg_pattern = apply_mask(bg_pattern, generate_gradient_mask_from_image(bg_pattern, interploation="linear"))
     bg_pattern = apply_gaussian_blur(bg_pattern, 9)
     background = add_images(background, bg_pattern)
+    background = add_text(background, "#Open to Work".upper(), text_color, y_offset=-200)
 
     poster = overlay_image(background.copy(), masked_cutout)
     fade_gradient = create_fade_to_transparent(left_bg, fade_strength=1.5)
