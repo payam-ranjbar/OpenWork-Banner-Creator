@@ -1,9 +1,9 @@
 from fastapi import FastAPI, UploadFile, File, Form
 import shutil
 import os
-from models.Profile import Profile
-from models.ColorPaletteGenerator import ColorPalette, ColorPaletteGenerator
-from service.banner_service import banner_service
+from src.models.Profile import Profile
+from src.models.ColorPaletteGenerator import ColorPalette, ColorPaletteGenerator
+from src.service.banner_service import banner_service
 app = FastAPI()
 
 UPLOAD_FOLDER = "../DB/profile-pictures/"

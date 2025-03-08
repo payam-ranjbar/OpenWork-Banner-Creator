@@ -61,4 +61,4 @@ def banner_service(profile: Profile, color_palette: ColorPalette = None):
 
 
 def check_pattern(profile: Profile):
-    return  "../assets/background-patterns/default.png" if profile.pattern_bg is None else profile.pattern_bg
+    return "./assets/background-patterns/default.png" if profile.pattern_bg is None else profile.pattern_bg
