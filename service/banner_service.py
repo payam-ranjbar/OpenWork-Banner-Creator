@@ -6,16 +6,16 @@ from utils.image_filters import decrease_contrast, apply_tint_filter
 from utils.overlay_utils import overlay_image, add_images, create_fade_to_transparent
 from utils.text_utils import add_text_center, add_text_fit_width
 from models.Profile import Profile
-from models.ColorPalette import ColorPalette
+from models.ColorPaletteGenerator import ColorPaletteGenerator
 
 
-def generate_banner(profile: Profile, color_palette: ColorPalette = None):
+def generate_banner(profile: Profile, color_palette: ColorPaletteGenerator = None):
     image_path = profile.picture
     person_name = profile.name
     person_header = profile.header
 
     if color_palette is None:
-        color_palette = ColorPalette(image_path)
+        color_palette = ColorPaletteGenerator(image_path)
 
     left_bg = color_palette.accent_color_left
     right_bg = color_palette.accent_color_right

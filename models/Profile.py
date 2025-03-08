@@ -1,6 +1,13 @@
-class Profile:
-    def __init__(self, name, header, picture, pattern_bg):
-        self.name = name
-        self.header = header
-        self.picture = picture
-        self.pattern_bg = pattern_bg
+from typing import Optional
+
+from pydantic import BaseModel
+
+
+
+
+
+class Profile(BaseModel):
+    name: str
+    header: str
+    picture: str
+    pattern_bg: Optional[str] = None

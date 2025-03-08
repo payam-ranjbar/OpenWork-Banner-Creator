@@ -7,8 +7,18 @@ from utils.color_wheel import (
 )
 from utils.file_utils import get_unique_filename, load_image_rgb
 
+from pydantic import BaseModel
 
-class ColorPalette:
+from typing import Tuple
+
+class ColorPalette(BaseModel):
+    primary_color: Tuple[int, int, int]
+    secondary_color: Tuple[int, int, int]
+    accent_color_left: Tuple[int, int, int]
+    accent_color_right: Tuple[int, int, int]
+    text_color: Tuple[int, int, int]
+
+class ColorPaletteGenerator:
     def __init__(self, image_path):
         """Extracts a color palette from an image."""
         self.image_path = image_path
@@ -18,7 +28,8 @@ class ColorPalette:
     def _extract_colors(self):
         self._primary_color = get_dominant_color(self._base_image)
         self._secondary_color = get_complementary_color(self._primary_color)
-        self._accent_color_left, self._accent_color_right, self._text_color = get_colors(self.image_path, self._primary_color)
+        self._accent_color_left, self._accent_color_right, self._text_color = get_colors(self.image_path,
+                                                                                         self._primary_color)
         self._title_text_color = self._text_color
         self._subtitle_text_color = self._text_color
 
@@ -46,6 +57,17 @@ class ColorPalette:
     def subtitle_text_color(self):
         return self._subtitle_text_color
 
+    def get_palette(self) -> ColorPalette:
+        """
+        Returns a structured color palette as a Pydantic model.
+        """
+        return ColorPalette(
+            primary_color=self._primary_color,
+            secondary_color=self._secondary_color,
+            accent_color_left=self._accent_color_left,
+            accent_color_right=self._accent_color_right,
+            text_color=self._text_color,
+        )
     def plot_palette(self):
         """Visualizes the generated color palette and saves it as a PNG file."""
         labels = [
@@ -79,13 +101,9 @@ class ColorPalette:
         plt.tight_layout()
         os.makedirs("assets/color_palette", exist_ok=True)
         file_name = os.path.basename(self.image_path).split('.')[0] + "_palette.png"
-        save_path = get_unique_filename("assets/color_palette", file_name)
+        save_path = get_unique_filename("../assets/color_palette", file_name)
         plt.savefig(save_path)
         print(f"✅ Color palette saved as '{save_path}'")
         plt.show()
 
 
-if __name__ == "__main__":
-    image_path = "sample-image/example.png"  # Update with actual image path
-    color_palette = ColorPalette(image_path)
-    color_palette.plot_palette()
