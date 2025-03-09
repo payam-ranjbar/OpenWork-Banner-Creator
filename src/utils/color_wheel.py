@@ -28,24 +28,15 @@ def get_analogous_colors(bgr_color, n=3, offset=30):
 
 
 def get_complementary_color(bgr_color, boost_s=1, boost_v=1.2):
-    """
-    Generate a more vibrant complementary color.
-    :param bgr_color: Input BGR color.
-    :param boost_s: Multiplier to increase saturation (default: 1.5).
-    :param boost_v: Multiplier to increase value (default: 1.2).
-    :return: Vibrant complementary BGR color.
-    """
+
     hsv_color = bgr_to_hsv(bgr_color)
     h, s, v = hsv_color
 
-    # Calculate complementary hue
     comp_h = (h + 90) % 180
 
-    # Boost saturation and value
-    comp_s = min(s * boost_s, 255)  # Ensure saturation doesn't exceed 255
-    comp_v = min(v * boost_v, 255)  # Ensure value doesn't exceed 255
+    comp_s = min(s * boost_s, 255)
+    comp_v = min(v * boost_v, 255)
 
-    # Convert back to BGR
     return hsv_to_bgr((comp_h, comp_s, comp_v))
 
 
@@ -140,17 +131,8 @@ def increase_luminance(bgr_color, luminance_boost=1.2):
 
 
 def get_dominant_color(image):
-    """
-    Detects the dominant color in an image.
 
-    Parameters:
-    - image (np.ndarray): Input image in BGR format.
-
-    Returns:
-    - tuple[int, int, int]: The dominant color in **BGR** format (OpenCV-compatible).
-    """
-    print("🎨 Detecting dominant color...")
-
+    print("> Detecting dominant color...")
 
     if image.shape[-1] == 4:  # If RGBA, remove alpha channel
         image = image[:, :, :3]  # Keep only RGB/BGR channels
@@ -178,11 +160,9 @@ def get_dominant_color(image):
     # Convert to integer BGR tuple (0-255)
     dominant_color = tuple(np.uint8(dominant_color))
 
-    print(f"🎨 Dominant color detected: {dominant_color}")
-    # dominant_color = increase_saturation(dominant_color, 2)
-    # dominant_color = increase_luminance(dominant_color, 2)
+    print(f">> Dominant color detected: {dominant_color}")
 
-    return dominant_color  # Already in BGR format
+    return dominant_color
 
 
 
@@ -210,7 +190,7 @@ def get_colors(image_path, dominant_color=None):
     image = cv2.imread(image_path)
     image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
 
-    # Downsample image for faster processing
+    # Downsample
     small_img = cv2.resize(image, (100, 100), interpolation=cv2.INTER_AREA)
 
     if dominant_color is None:

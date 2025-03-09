@@ -12,7 +12,7 @@ def decrease_contrast(image, amount=0.2):
     Returns:
     - np.ndarray: Image with reduced contrast.
     """
-    print(f"🎨 Reducing contrast with strength {amount}...")
+    print(f"> Reducing contrast with strength {amount}...")
 
     # Ensure amount is within valid range
     amount = max(0, min(amount, 1))
@@ -30,22 +30,11 @@ def decrease_contrast(image, amount=0.2):
     # Ensure values stay in range (0-255)
     image = np.clip(image, 0, 255).astype(np.uint8)
 
-    print("✅ Contrast reduced successfully.")
+    print(">> Contrast reduced successfully.")
     return image
 
 def apply_tint_filter(image, tint_color, strength=0.5):
-    """
-    Applies a color tint (filter) to an image.
-
-    Parameters:
-    - image (np.ndarray): Input image (RGBA or RGB format).
-    - tint_color (tuple[int, int, int]): RGB color of the tint.
-    - strength (float): Tint strength (0 = no effect, 1 = full tint).
-
-    Returns:
-    - np.ndarray: Image with the applied tint.
-    """
-    print(f"🎨 Applying tint filter with color {tint_color} and strength {strength}...")
+    print(f"> Applying tint filter with color {tint_color} and strength {strength}...")
 
     # Ensure strength is within valid range
     strength = max(0, min(strength, 1))
@@ -59,8 +48,6 @@ def apply_tint_filter(image, tint_color, strength=0.5):
 
     # Ensure values are within valid range (0-255)
     tinted_image = np.clip(tinted_image, 0, 255).astype(np.uint8)
-
-    print("✅ Tint filter applied successfully.")
     return tinted_image
 
 
@@ -75,7 +62,7 @@ def process_background_image(image, opacity=0.5):
     Returns:
     - np.ndarray: Processed background image with transparency.
     """
-    print(f"🖼️ Processing background image from {image} with opacity {opacity}...")
+    print(f"> Processing background image~...")
 
     # Convert to RGBA if it's not already
     if image.shape[2] == 3:  # If the image has no alpha channel, add one
@@ -94,24 +81,13 @@ def process_background_image(image, opacity=0.5):
     # Apply opacity by modifying the alpha channel
     image[:, :, 3] = (image[:, :, 3] * opacity).astype(np.uint8)
 
-    print("✅ Background processing complete (White pixels removed, opacity applied).")
+    print(">> Background processing complete (White pixels removed, opacity applied).")
     return image
 
-import cv2
-import numpy as np
 
 def apply_gaussian_blur(image, blur_amount=5):
-    """
-    Applies a Gaussian blur to an image.
 
-    Parameters:
-    - image (np.ndarray): Input image.
-    - blur_amount (int): Blur intensity (must be an odd number, e.g., 3, 5, 7).
-
-    Returns:
-    - np.ndarray: Blurred image.
-    """
-    print(f"🌫️ Applying Gaussian Blur with intensity {blur_amount}...")
+    print(f"> Applying Gaussian Blur with intensity {blur_amount}...")
 
     # Ensure blur_amount is an odd number (required by cv2.GaussianBlur)
     if blur_amount % 2 == 0:

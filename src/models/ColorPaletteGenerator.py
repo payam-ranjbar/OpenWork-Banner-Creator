@@ -22,17 +22,6 @@ class ColorPaletteGenerator:
         self.image_path = image_path
         self._base_image = load_image_rgb(image_path)
         self._extract_colors()
-        print(f"iamge path is on {self.image_path}")
-
-    # def __init__(self, colorPalette:ColorPalette):
-    #
-    #     self._primary_color = colorPalette.primary_color
-    #     self._secondary_color = colorPalette.secondary_color
-    #     self._accent_color_left = colorPalette.accent_color_left
-    #     self._accent_color_right = colorPalette.accent_color_right
-    #     self._text_color = colorPalette.text_color
-    #     self._title_text_color = colorPalette.text_color
-    #     self._subtitle_text_color = colorPalette.text_color
     def _extract_colors(self):
         self._primary_color = get_dominant_color(self._base_image)
         self._secondary_color = get_complementary_color(self._primary_color)
@@ -66,6 +55,9 @@ class ColorPaletteGenerator:
     @property
     def subtitle_text_color(self):
         return self._subtitle_text_color
+    @property
+    def text_color(self):
+        return self._text_color
 
     def get_palette(self) -> ColorPalette:
         return ColorPalette(
@@ -75,7 +67,7 @@ class ColorPaletteGenerator:
             accent_color_right=self._accent_color_right,
             text_color=self._text_color,
         )
-    def plot_palette(self):
+    def plot_palette(self, show=True):
         labels = [
             "Primary Color", "Secondary Color", "Accent Left", "Accent Right", "Title Text", "Subtitle Text"
         ]
@@ -105,11 +97,13 @@ class ColorPaletteGenerator:
 
         # Adjust layout and save the figure
         plt.tight_layout()
-        os.makedirs("../assets/color_palette", exist_ok=True)
+        os.makedirs("../assets/color-palette", exist_ok=True)
         file_name = os.path.basename(self.image_path).split('.')[0] + "_palette.png"
-        save_path = get_unique_filename("../assets/color_palette", file_name)
+        save_path = get_unique_filename("../assets/color-palette", file_name)
         plt.savefig(save_path)
-        print(f"✅ Color palette saved as '{save_path}'")
-        plt.show()
+        print(f">> Color palette saved as '{save_path}'")
+        if show:
+            plt.show()
+        return save_path
 
 

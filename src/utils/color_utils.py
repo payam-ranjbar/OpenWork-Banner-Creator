@@ -4,7 +4,7 @@ import numpy as np
 
 def extract_colors(image_path):
     """Extracts two background colors and one contrasting text color from an image."""
-    print("🔍 Extracting colors from image...")
+    print("> Extracting colors from image...")
 
     image = cv2.imread(image_path)
     image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
@@ -28,7 +28,6 @@ def create_gradient_rectangle(color1, color2, width=1920, height=1080):
     color1 = np.array(color1, dtype=np.float32)
     color2 = np.array(color2, dtype=np.float32)
 
-    # Create alpha values for each column
     alpha = np.linspace(0, 1, width, dtype=np.float32)
 
     # Vectorized interpolation

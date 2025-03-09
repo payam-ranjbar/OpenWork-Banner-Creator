@@ -3,7 +3,7 @@ import shutil
 import os
 from src.models.Profile import Profile
 from src.models.ColorPaletteGenerator import ColorPalette, ColorPaletteGenerator
-from src.service.banner_service import banner_service
+from src.service.banner_service import generate_banner
 app = FastAPI()
 
 UPLOAD_FOLDER = "../DB/profile-pictures/"
@@ -35,7 +35,7 @@ async def get_banner_from_profile(
 ):
     profile = await save_profile_picture(name, header, picture)
     generator = ColorPaletteGenerator(profile.picture)
-    banner = banner_service(profile, generator.get_palette())
+    banner = generate_banner(profile, generator.get_palette())
     return banner
 
 

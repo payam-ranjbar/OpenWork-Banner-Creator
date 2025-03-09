@@ -3,7 +3,7 @@ import numpy as np
 from src.utils.blending_modes import blend_normal
 def overlay_image(bg, fg):
     """Overlays the cutout image onto the background while maintaining aspect ratio."""
-    print("🔗 Overlaying subject on background...")
+    print("> Overlaying subject on background...")
 
     fg_height, fg_width = fg.shape[:2]
     aspect_ratio = fg_width / fg_height
@@ -25,7 +25,7 @@ def overlay_image(bg, fg):
 
 def create_fade_to_transparent(color, width=1920, fade_strength=0.4, height=1080):
     """Creates a vertical gradient from a solid color at the bottom to fully transparent at the top."""
-    print("🎨 Creating transparent fade overlay...")
+    print("> Creating transparent fade overlay...")
     fade_height = int(height * fade_strength)
     gradient = np.zeros((height, width, 4), dtype=np.uint8)
 
@@ -38,7 +38,7 @@ def create_fade_to_transparent(color, width=1920, fade_strength=0.4, height=1080
 
 def add_images(bg, fg, blend_function=None):
 
-    print(f"🔗 Applying custom blend mode...")
+    print(f"> Applying custom blend mode...")
 
     fg = cv2.resize(fg, (bg.shape[1], bg.shape[0]))
 
@@ -52,19 +52,8 @@ def add_images(bg, fg, blend_function=None):
     return blended_image
 
 def generate_gradient_mask_from_image(image, fade_strength=1.0, fade_direction=1, gradient_direction="vertical", interploation = "quadratic"):
-    """
-    Generates a gradient mask based on an image's width and height.
-
-    Parameters:
-    - image (np.ndarray): Input image (to get width & height).
-    - fade_strength (float): Strength of fade (0.0 to 1.0, higher = more fade).
-    - direction (str): "vertical" (top to bottom) or "horizontal" (left to right).
-
-    Returns:
-    - np.ndarray: Gradient mask (grayscale, 0-255).
-    """
     height, width = image.shape[:2]  # Get image dimensions
-    print(f"📏 Generating {gradient_direction} gradient mask for {width}x{height} image with strength {fade_strength}...")
+    print(f"> Generating {gradient_direction} gradient mask for {width}x{height} image with strength {fade_strength}...")
 
     # Ensure fade_strength is within valid range
     fade_strength = np.clip(fade_strength, 0.0, 1.0)
@@ -92,22 +81,8 @@ def generate_gradient_mask_from_image(image, fade_strength=1.0, fade_direction=1
     return mask
 
 def interpolate_gradient(length, start_value, end_value, interpolation="quadratic"):
-    """
-    Generates a gradient using quadratic interpolation.
-
-    Parameters:
-    - length (int): Length of the gradient (number of steps).
-    - start_value (int): Starting value of the gradient (0-255).
-    - end_value (int): Ending value of the gradient (0-255).
-    - interpolation (str): Type of interpolation ("linear", "quadratic").
-
-    Returns:
-    - np.ndarray: Gradient array (0-255).
-    """
-    # Generate a linear gradient from 0 to 1
     gradient = np.linspace(0, 1, length)
 
-    # Apply interpolation
     if interpolation == "quadratic":
         gradient = gradient ** 8  # Quadratic interpolation
     elif interpolation == "linear":
@@ -115,8 +90,6 @@ def interpolate_gradient(length, start_value, end_value, interpolation="quadrati
     else:
         raise ValueError("Unsupported interpolation type. Use 'linear' or 'quadratic'.")
 
-    # Scale the gradient to the desired range (start_value to end_value)
     gradient = start_value + (end_value - start_value) * gradient
 
-    # Convert to uint8
     return gradient.astype(np.uint8)

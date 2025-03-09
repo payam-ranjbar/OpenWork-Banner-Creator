@@ -12,7 +12,7 @@ def apply_mask(image, mask):
     Returns:
     - np.ndarray: Masked image with smooth transparency.
     """
-    print("🎭 Applying mask to the image...")
+    print("> Applying mask to the image...")
 
     # Ensure the mask is grayscale
     if len(mask.shape) == 3:
@@ -30,5 +30,5 @@ def apply_mask(image, mask):
     # Apply the blended alpha channel back to the image
     image[:, :, 3] = new_alpha
 
-    print("✅ Clipping mask applied successfully.")
+    print(">> Clipping mask applied successfully.")
     return image

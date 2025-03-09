@@ -11,7 +11,7 @@ from src.models.Profile import Profile
 from src.models.ColorPaletteGenerator import ColorPaletteGenerator, ColorPalette
 
 
-def banner_service(profile: Profile, color_palette: ColorPalette = None):
+def generate_banner(profile: Profile, color_palette: ColorPalette = None):
     image_path = profile.picture
     bg_pattern_source = check_pattern(profile)
     person_name = profile.name
@@ -20,8 +20,6 @@ def banner_service(profile: Profile, color_palette: ColorPalette = None):
     if color_palette is None:
         color_palette = ColorPaletteGenerator(image_path)
 
-
-    print(f"color paletet is: {color_palette}")
     left_bg = color_palette.accent_color_left
     right_bg = color_palette.accent_color_right
     text_color = color_palette.text_color
@@ -37,8 +35,6 @@ def banner_service(profile: Profile, color_palette: ColorPalette = None):
     masked_cutout = apply_mask(tinted_cutout, gradient_mask)
 
     background = cv2.cvtColor(background, cv2.COLOR_RGB2RGBA)
-    print(f"pattern is at {bg_pattern_source}")
-
     bg_pattern = cv2.imread(bg_pattern_source, cv2.IMREAD_UNCHANGED)
     bg_pattern = process_background_image(bg_pattern, opacity=0.2)
     bg_pattern = apply_mask(bg_pattern, generate_gradient_mask_from_image(bg_pattern, interploation="linear"))
@@ -56,7 +52,7 @@ def banner_service(profile: Profile, color_palette: ColorPalette = None):
 
     output_path, output_name = save_poster(poster, image_path)
     profile.generated_poster = output_name
-    print(f"Banner saved at: {output_path}")
+    print(f">>> Banner saved at: {output_path}")
     return profile
 
 
