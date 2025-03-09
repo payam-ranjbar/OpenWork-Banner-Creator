@@ -36,7 +36,7 @@ def generate_banner(profile: Profile, color_palette: ColorPalette = None):
 
     background = cv2.cvtColor(background, cv2.COLOR_RGB2RGBA)
     bg_pattern = cv2.imread(bg_pattern_source, cv2.IMREAD_UNCHANGED)
-    bg_pattern = process_background_image(bg_pattern, opacity=0.2)
+    bg_pattern = process_background_image(bg_pattern, opacity=0.6)
     bg_pattern = apply_mask(bg_pattern, generate_gradient_mask_from_image(bg_pattern, interploation="linear"))
     bg_pattern = apply_gaussian_blur(bg_pattern, 9)
     background = add_images(background, bg_pattern)

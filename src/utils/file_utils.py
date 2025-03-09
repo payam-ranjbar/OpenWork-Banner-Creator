@@ -17,8 +17,8 @@ def save_poster(image, image_path):
     print("> Saving poster...")
 
     os.makedirs("posters", exist_ok=True)  # Ensure the directory exists
-    output_name = f"{os.path.basename(image_path).split('.')[0]}-poster.png"
-    output_path = get_unique_filename("assets/output-banners", f"{os.path.basename(image_path).split('.')[0]}-banner.png")
+    output_name = f"{os.path.basename(image_path).split('.')[0]}-banner.png"
+    output_path = get_unique_filename("../../assets/output-banners", f"{os.path.basename(image_path).split('.')[0]}-banner.png")
 
     cv2.imwrite(output_path, image)  # Save the poster
     print(f">> Poster saved at: {output_path}")

@@ -68,15 +68,15 @@ def process_background_image(image, opacity=0.5):
     if image.shape[2] == 3:  # If the image has no alpha channel, add one
         image = cv2.cvtColor(image, cv2.COLOR_BGR2BGRA)
 
-    # Define the white color range to be removed
-    lower_white = np.array([200, 200, 200, 255], dtype=np.uint8)  # Bright white
-    upper_white = np.array([255, 255, 255, 255], dtype=np.uint8)
-
-    # Create a mask for white pixels
-    white_mask = cv2.inRange(image, lower_white, upper_white)
-
-    # Set white pixels to fully transparent
-    image[white_mask == 255] = [0, 0, 0, 0]  # RGBA: (0, 0, 0, 0)
+    # # Define the white color range to be removed
+    # lower_white = np.array([200, 200, 200, 255], dtype=np.uint8)  # Bright white
+    # upper_white = np.array([255, 255, 255, 255], dtype=np.uint8)
+    #
+    # # Create a mask for white pixels
+    # white_mask = cv2.inRange(image, lower_white, upper_white)
+    #
+    # # Set white pixels to fully transparent
+    # image[white_mask == 255] = [0, 0, 0, 0]  # RGBA: (0, 0, 0, 0)
 
     # Apply opacity by modifying the alpha channel
     image[:, :, 3] = (image[:, :, 3] * opacity).astype(np.uint8)
