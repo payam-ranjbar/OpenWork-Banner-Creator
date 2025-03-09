@@ -69,7 +69,7 @@ class ColorPaletteGenerator:
         )
     def plot_palette(self, show=True):
         labels = [
-            "Primary Color", "Secondary Color", "Accent Left", "Accent Right", "Title Text", "Subtitle Text"
+            "Primary", "Secondary", "Accent Left", "Accent Right", "Title Text", "Subtitle Text"
         ]
         colors = [
             self.primary_color, self.secondary_color, self.accent_color_left, self.accent_color_right,

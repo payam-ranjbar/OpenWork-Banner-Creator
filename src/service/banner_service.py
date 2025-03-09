@@ -51,7 +51,7 @@ def generate_banner(profile: Profile, color_palette: ColorPalette = None):
                                 max_font_size=50)
 
     output_path, output_name = save_poster(poster, image_path)
-    profile.generated_poster = output_name
+    profile.generated_poster = output_path
     print(f">>> Banner saved at: {output_path}")
     return profile
 
