@@ -169,7 +169,7 @@ def get_dominant_color(image):
 def get_text_color(left_bg, right_bg):
     # Previous contrast calculation remains the same
     light = (255, 247, 216)
-    dark = (27, 31, 40)
+    dark = (41,41,28)
 
     # Calculate contrast ratios
     contrast_white_left = get_contrast_ratio(light, left_bg)
@@ -180,9 +180,6 @@ def get_text_color(left_bg, right_bg):
     contrast_black_right = get_contrast_ratio(dark, right_bg)
     min_black = min(contrast_black_left, contrast_black_right)
 
-
-
-    # Choose color with  minimum contrast
     return light if min_white > min_black else dark
 
 
