@@ -1,90 +1,135 @@
 # LinkedIn Banner Creator 
 
-A dynamic poster generator tailored for LinkedIn profiles. Creates professional "Open to Work" banners with custom color schemes derived from your profile picture. *No OpenAI integration—uses smart color analysis and user-provided patterns for backgrounds.*
+A dynamic poster generator tailored for LinkedIn profiles. 
+Creates professional "Open to Work" banners with custom color schemes derived from your profile picture.
 
 ## Poster Examples
 | [<img src="https://payam.pro/wp-content/uploads/2025/03/payam-poster.png" width="300" alt="Tech Poster">](#) | [<img src="https://payam.pro/wp-content/uploads/2025/03/yaro4-poster.png" width="300" alt="Academic Poster">](#) |
 |:---:|:---:|
 | [<img src="https://payam.pro/wp-content/uploads/2025/03/yaro-2-poster.png" width="300" alt="Developer Poster">](#) | [<img src="https://payam.pro/wp-content/uploads/2025/03/yaro-1-poster.png" width="300" alt="Research Poster">](#) |
 
+---
 
 ## Features
-- **Smart Color Extraction**: Dominant & complementary colors extracted from your profile picture.
-- **Gradient Backgrounds**: Seamless gradients based on analogous colors.
-- **Custom Patterns**: Apply your own background patterns with adjustable opacity/blur.
-- **Text Styling**: Auto-sized text with custom fonts, spacing, and contrast optimization.
-- **Transparency Effects**: Soft fades, overlays, and clipping masks for professional polish.
-- **Background Removal**: Fast subject isolation using `rembg`.
+
+- **Smart Color Extraction**: Dominant & complementary colors automatically derived from your profile picture.
+- **Custom Patterns**: Include optional background patterns with adjustable opacity and blur.
 
 ---
 
-##  Installation
-1. **Requirements**:  
-   Python 3.8+ | OpenCV | NumPy | rembg | Matplotlib | Pillow  
+## Installation
+
+1. **Requirements**  
+   - Python 3.8+  
+   - OpenCV  
+   - NumPy  
+   - rembg  
+   - Matplotlib  
+   - Pillow  
+
+   Install everything from `requirements.txt`:
    ```bash
    pip install -r requirements.txt
    ```
 
-2. **Font Setup**:  
-   Place your `.ttf` font file in `/assets/` and update `FONT_PATH` in `text_utils.py`.
+2. **Font Setup**  
+   Place your `.ttf` font file in `/assets/` and update the `FONT_PATH` inside `text_utils.py` if you want to change the default font.
 
 ---
 
 ## Usage
-1. **Prepare Assets**:
-   - Profile image (e.g., `sample-image/payam.png`).
-   - Background pattern (optional, e.g., `background-patterns/payam-pattern-bg-2.png`).
 
-2. **Create a Profile**:
-   ```python
-   from src.models.Profile import Profile
+### 1. Prepare Assets
+- **Profile Image** (e.g., `sample-image/jane.png`).
+- **Background Pattern** (optional, e.g., `background-patterns/jane-pattern-bg.png`).
 
-   user = Profile(
-       name="Payam Ranjbar",
-       header="Unity Developer | Technical Game Designer",
-       picture="path/to/profile.png",
-       pattern_bg="path/to/pattern.png"  # Optional
-   )
-   ```
+### 2. Create a Profile
 
-3. **Generate Poster**:
-   ```python
-   from src.tests.poster_generation_test import generate_poster
-   output_filename = generate_poster(user)
-   ```
+You can programmatically define a `Profile` object:
 
-4. **View Color Palette** (Optional):
-   ```python
-   from src.tests.poster_generation_test import plot_colors
-   plot_colors(user.picture, output_filename)
-   ```
+```python
+from src.models.Profile import Profile
+
+user = Profile(
+    name="Jane",
+    header="Creative Developer",
+    picture="sample-image/jane.png",
+    pattern_bg="background-patterns/jane-pattern-bg.png"  # Optional
+)
+```
+
+### 3. Generate Poster via CLI
+
+You can also create a banner directly from the command line using the script in `src/cli/make_banner_cli.py`:
+
+```bash
+python src/cli/make_banner_cli.py \
+  "Jane" \
+  "Creative Developer" \
+  "sample-image/jane.png" \
+  --pattern "background-patterns/jane-pattern-bg.png" \
+  --popup \
+  --palette
+```
+
+- `--popup` shows the final banner in a matplotlib window.
+- `--palette` displays the extracted color palette in a separate matplotlib window.
+
+### 4. View Color Palette (Optional)
+
+If you just want to see the color palette for your image without generating a full banner, you can run:
+
+```bash
+python -m src.cli.make_banner_cli "Jane" "Developer" "sample-image/jane.png" --popup
+```
 
 ---
 
 ## File Structure
+
+A representative layout for the project is shown below. `server.py` lives inside `src/` while `assets/` (containing images, fonts, etc.) sits at the same level as `src/`. Packages are organized to separate concerns:
+
 ```
-.
-├── utils/                 # Core modules
-│   ├── color_wheel.py     # Color theory & extraction
-│   ├── text_utils.py      # Text rendering & styling
-│   ├── image_filters.py   # Blur, tint, contrast adjustments
-│   └── ...                # Other utilities
-├── background-patterns/   # Custom background images
-├── sample-image/          # Example profile pictures
-├── posters/               # Output directory
-└── assets/                # Font files (e.g., Anton-Regular.ttf)
+project-root/
+├── assets/
+│   └── ... (fonts, background images, output folders, etc.)
+└── src
+    ├── cli
+    │   └── make_banner_cli.py
+    ├── models
+    │   ├── ColorPaletteGenerator.py
+    │   └── Profile.py
+    ├── service
+    │   ├── banner_service.py
+    │   └── color_palette_service.py
+    ├── tests
+    ├── utils
+    │   ├── bg_remover.py
+    │   ├── blending_modes.py
+    │   ├── color_utils.py
+    │   ├── color_wheel.py
+    │   ├── file_utils.py
+    │   ├── image_filters.py
+    │   ├── masking.py
+    │   ├── overlay_utils.py
+    │   └── text_utils.py
+    └── server.py
 ```
 
 ---
 
 ## Customization Tips
-- **Background Patterns**: Use geometric/textured PNGs for `pattern_bg`.
-- **Color Boosts**: Adjust saturation/luminance in `color_wheel.py`.
-- **Text Styles**: Modify letter spacing/font sizes in `text_utils.py`.
-- **Gradient Fades**: Tweak `fade_strength` in `overlay_utils.py`.
+
+- **Fonts**: Update the `FONT_PATH` in `text_utils.py` to point to any `.ttf` you prefer.  
+- **Color Tuning**: Adjust the complementary or saturation logic in `color_wheel.py` and `color_utils.py` to alter the final palette.  
+- **Background Patterns**: Provide different patterns and tweak opacity/blur in `image_filters.py` or `banner_service.py`.  
+- **Layout**: Modify banner size and text positions in `banner_service.py`, or switch up the blending functions in `blending_modes.py`.  
 
 ---
 
-- **Performance**: Optimized for speed (resizing + k-means color clustering).
-- **Transparency**: All outputs are PNGs with alpha channels.
+## To-Do
+
+- **LinkedIn API Integration**: Automate uploading banners and updating profiles directly via the LinkedIn API.
+- **FastAPI Deployment**: Further develop the existing `server.py` endpoints for a full REST API and simplify deployment (e.g., Docker + Uvicorn).
+- **Advanced Customization**: Add more blending modes and text styling options.
 
